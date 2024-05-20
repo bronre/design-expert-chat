@@ -1,9 +1,10 @@
 // api/chat.js
-import OpenAI from 'openai';
+import { Configuration, OpenAIApi } from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env['OPENAI_API_KEY'],
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
 });
+const openai = new OpenAIApi(configuration);
 
 export default async (req, res) => {
   if (req.method !== 'POST') {
@@ -17,12 +18,12 @@ export default async (req, res) => {
   }
 
   try {
-    const response = await openai.chat.completions.create({
+    const response = await openai.createChatCompletion({
       model: 'gpt-4',
       messages: [{ role: 'user', content: message }],
     });
 
-    const botMessage = response.choices[0].message.content;
+    const botMessage = response.data.choices[0]?.message?.content;
     if (!botMessage) {
       throw new Error('Invalid response from OpenAI API');
     }
