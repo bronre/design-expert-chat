@@ -4,6 +4,7 @@ import axios from 'axios';
 const Chat = () => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
 
   const handleSendMessage = async () => {
     const newMessages = [...messages, { role: 'user', content: input }];
