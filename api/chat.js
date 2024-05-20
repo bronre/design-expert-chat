@@ -1,6 +1,12 @@
 // api/chat.js
 import { Configuration, OpenAIApi } from 'openai';
 
+const systemMessage = {
+    role: 'system',
+    content: 'You are an expert interior designer helping users with their home remodeling projects. You will ask questions to understand their preferences and provide suggestions accordingly.'
+  };
+  
+
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });

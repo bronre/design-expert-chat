@@ -31,12 +31,9 @@ const Chat = () => {
 
     try {
       const response = await axios.post('/api/chat', { message: input });
+      console.log(response.data);
       const botMessage = response.data.message;
-
-      // Handle guided prompts
-      const followUpMessages = handleUserInput(input);
-
-      setMessages([...newMessages, { role: 'bot', content: botMessage }, ...followUpMessages]);
+      setMessages([...newMessages, { role: 'bot', content: botMessage }]);
     } catch (error) {
       console.error('Error sending message:', error);
       setMessages([...newMessages, { role: 'bot', content: 'Error: Unable to get response from API' }]);
@@ -44,23 +41,17 @@ const Chat = () => {
       setIsTyping(false);
     }
   };
-
-  const handleUserInput = (input) => {
-    // Implement logic to navigate through the conversation flow based on user input
-    if (input.toLowerCase() === 'kitchen') {
-      return [
-        { role: 'bot', content: 'What style do you prefer for your kitchen? (e.g., modern, rustic, traditional)' },
-        { role: 'bot', content: 'Do you prefer an open or closed layout? (Open/Closed)' }
-      ];
-    } else if (input.toLowerCase() === 'bathroom') {
-      return [
-        { role: 'bot', content: 'What style do you prefer for your bathroom? (e.g., modern, spa, traditional)' },
-        { role: 'bot', content: 'Do you prefer a shower, bathtub, or both?' }
-      ];
+  useEffect(() => {
+    const savedMessages = localStorage.getItem('chatMessages');
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
     }
-    // Add more conditions as needed
-    return [];
-  };
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('chatMessages', JSON.stringify(messages));
+  }, [messages]);
+
 
   return (
     <div className="chat-container">
@@ -70,7 +61,9 @@ const Chat = () => {
             {msg.content}
           </div>
         ))}
-        {isTyping && <div className="typing-indicator">Bot is typing...</div>}
+
+{isTyping && <div className="typing-indicator">Bot is typing...</div>}
+      
       </div>
       <div className="input-container">
         <input
