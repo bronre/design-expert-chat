@@ -31,7 +31,10 @@ const Chat = () => {
 
     try {
       const response = await axios.post('/api/chat', { message: input });
-      const { message: botMessage, followUpMessages } = response.data;
+      const { message: botMessage } = response.data;
+
+      // Handle follow-up messages (if any)
+      const followUpMessages = response.data.followUpMessages || [];
 
       setMessages([...newMessages, { role: 'bot', content: botMessage }, ...followUpMessages]);
     } catch (error) {
