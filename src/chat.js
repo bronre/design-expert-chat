@@ -31,9 +31,9 @@ const Chat = () => {
 
     try {
       const response = await axios.post('/api/chat', { message: input });
-      console.log(response.data);
-      const botMessage = response.data.message;
-      setMessages([...newMessages, { role: 'bot', content: botMessage }]);
+      const { message: botMessage, followUpMessages } = response.data;
+
+      setMessages([...newMessages, { role: 'bot', content: botMessage }, ...followUpMessages]);
     } catch (error) {
       console.error('Error sending message:', error);
       setMessages([...newMessages, { role: 'bot', content: 'Error: Unable to get response from API' }]);
@@ -41,17 +41,6 @@ const Chat = () => {
       setIsTyping(false);
     }
   };
-  useEffect(() => {
-    const savedMessages = localStorage.getItem('chatMessages');
-    if (savedMessages) {
-      setMessages(JSON.parse(savedMessages));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('chatMessages', JSON.stringify(messages));
-  }, [messages]);
-
 
   return (
     <div className="chat-container">
@@ -61,9 +50,7 @@ const Chat = () => {
             {msg.content}
           </div>
         ))}
-
-{isTyping && <div className="typing-indicator">Bot is typing...</div>}
-      
+        {isTyping && <div className="typing-indicator">Bot is typing...</div>}
       </div>
       <div className="input-container">
         <input
