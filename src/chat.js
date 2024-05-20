@@ -6,6 +6,23 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
 
+  useEffect(() => {
+    const savedMessages = localStorage.getItem('chatMessages');
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
+    } else {
+      // Initial greeting and instructions
+      setMessages([
+        { role: 'bot', content: 'Hello! I am your design remodel expert. Let’s get started with your project.' },
+        { role: 'bot', content: 'What room are you looking to remodel? (e.g., kitchen, bathroom, living room)' }
+      ]);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('chatMessages', JSON.stringify(messages));
+  }, [messages]);
+
   const handleSendMessage = async () => {
     const newMessages = [...messages, { role: 'user', content: input }];
     setMessages(newMessages);
@@ -24,6 +41,17 @@ const Chat = () => {
       setIsTyping(false);
     }
   };
+  useEffect(() => {
+    const savedMessages = localStorage.getItem('chatMessages');
+    if (savedMessages) {
+      setMessages(JSON.parse(savedMessages));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('chatMessages', JSON.stringify(messages));
+  }, [messages]);
+
 
   return (
     <div className="chat-container">
@@ -33,6 +61,9 @@ const Chat = () => {
             {msg.content}
           </div>
         ))}
+
+{isTyping && <div className="typing-indicator">Bot is typing...</div>}
+      
       </div>
       <div className="input-container">
         <input
