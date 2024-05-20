@@ -10,6 +10,7 @@ const Chat = () => {
     const newMessages = [...messages, { role: 'user', content: input }];
     setMessages(newMessages);
     setInput('');
+    setIsTyping(true);
 
     try {
       const response = await axios.post('/api/chat', { message: input });
@@ -19,6 +20,8 @@ const Chat = () => {
     } catch (error) {
       console.error('Error sending message:', error);
       setMessages([...newMessages, { role: 'bot', content: 'Error: Unable to get response from API' }]);
+    } finally {
+      setIsTyping(false);
     }
   };
 
