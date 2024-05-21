@@ -1,15 +1,19 @@
 // api/chat.js
 import { Configuration, OpenAIApi } from 'openai';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 const systemMessage = {
-    role: 'system',
-    content: 'You are an advanced chatbot with expertise in home remodeling and design, that guides users through their home remodel design process by asking questions about their needs and preferences, generating personalized design suggestions, and presenting 3D visualizations of different options. Use examples and evidence to support your points and justify your recommendations or solutions.'
-  };
-  
+  role: 'system',
+  content: 'You are an advanced chatbot with expertise in home remodeling and design, that guides users through their home remodel design process by asking questions about their needs and preferences, generating personalized design suggestions, and presenting 3D visualizations of different options. Use examples and evidence to support your points and justify your recommendations or solutions.'
+};
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
+
 const openai = new OpenAIApi(configuration);
 
 // Welcome message to be sent at the start of the conversation
@@ -20,7 +24,7 @@ export default async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { message } = req.body;
+  const { message, isInitial } = req.body;
 
   if (!message && !isInitial) {
     return res.status(400).json({ error: 'Message is required' });
@@ -34,7 +38,10 @@ export default async (req, res) => {
   try {
     const response = await openai.createChatCompletion({
       model: 'gpt-4',
-      messages: [{ role: 'user', content: message }],
+      messages: [
+        systemMessage,
+        { role: 'user', content: message },
+      ],
     });
 
     const botMessage = response.data.choices[0]?.message?.content;
