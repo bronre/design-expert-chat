@@ -12,6 +12,7 @@ const systemMessage = {
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
+  timeout: 60000, // 60 seconds timeout
 });
 
 const openai = new OpenAIApi(configuration);
@@ -43,6 +44,7 @@ export default async (req, res) => {
         { role: 'user', content: message },
       ],
     });
+    console.log('Received response from OpenAI API');
 
     const botMessage = response.data.choices[0]?.message?.content;
     if (!botMessage) {
