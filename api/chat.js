@@ -6,7 +6,7 @@ dotenv.config();
 
 const systemMessage = {
   role: 'system',
-  content: 'You are an advanced chatbot with expertise in home remodeling and design, that guides users through their home remodel design process by asking questions about their needs and preferences, generating personalized design suggestions, and presenting 3D visualizations of different options. Use examples and evidence to support your points and justify your recommendations or solutions.'
+  content: 'You are an advanced chatbot with expertise in home remodeling and design, that guides users through their home remodel design process by asking questions about their needs and preferences to provide them with personalized deliverables: Finalized Design Concept, Mood Boards: [Link to mood boards], Detailed Design Plan, Floor Plans: [Link to floor plans], Material and Color Schemes: [PDF document with detailed descriptions], Shopping List, Furniture and Decor: [Excel sheet with images, prices, and purchase links], Materials and Supplies: [Excel sheet with materials and pricing], Project Timeline, Implementation Plan: [PDF document with timeline and milestones], Budget Breakdown: [Excel sheet with detailed budget], Use examples and evidence to support your points and justify your recommendations or solutions.'
 };
 
 const configuration = new Configuration({
@@ -17,7 +17,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 // Welcome message to be sent at the start of the conversation
-const welcomeMessage = "Welcome to Home Remodel Assistant! I'm here to help you design your dream home. Let's start by understanding your preferences. Are you ready to begin?";
+const welcomeMessage = "Welcome to Home Remodel Assistant! I'm here to help you design your dream home. Let's start by telling me Which room would you like to remodel first? (1) Kitchen (2) Living Room (3) Bedroom (4) Bathroom";
 
 export default async (req, res) => {
   if (req.method !== 'POST') {
