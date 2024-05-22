@@ -1,12 +1,8 @@
-// api/chat.js
 import { Configuration, OpenAIApi } from 'openai';
 import dotenv from 'dotenv';
 
 // Load environment variables
 dotenv.config();
-
-// Debugging: Log the API key to ensure it's loaded
-console.log('API Key:', process.env.OPENAI_API_KEY);
 
 const systemMessage = {
   role: 'system',
