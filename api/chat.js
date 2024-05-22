@@ -30,13 +30,17 @@ export default async (req, res) => {
 
   const { message, isInitial } = req.body;
 
-  if (!message && !isInitial) {
-    return res.status(400).json({ error: 'Message is required' });
-  }
-
   // Debugging: Log the received message
   console.log('Received message:', message);
   console.log('Is initial request:', isInitial);
+
+  if (typeof isInitial === 'undefined') {
+    return res.status(400).json({ error: 'isInitial flag is required' });
+  }
+
+  if (!message && !isInitial) {
+    return res.status(400).json({ error: 'Message is required' });
+  }
 
   // If this is the initial request, send the welcome message
   if (isInitial) {
