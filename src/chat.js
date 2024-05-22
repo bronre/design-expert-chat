@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './Chat.css'; // Optional: For custom styles
 
 const Chat = () => {
   const [input, setInput] = useState('');
